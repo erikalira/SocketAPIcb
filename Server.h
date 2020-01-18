@@ -31,9 +31,9 @@ class Server
         ~Server();//destrutor
 
     private:
-        int local_socket = INVALID_SOCKET;
-        unsigned short local_port;
-        sockaddr_in local_address;
+        unsigned local_socket = INVALID_SOCKET; //used
+        unsigned short local_port; //used
+        sockaddr_in local_address; //used
         sockaddr_in remote_address;
 };
 

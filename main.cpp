@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Socket.h"
+#include "Server.h"
 
 using namespace std;
 
@@ -9,9 +9,16 @@ using namespace std;
 
 int main()
 {
-    ServerSocket socket;
+    Server socket;
+
+    socket.Bind(8000);
+
+    //listen and accept
+    socket.Accept();
 
     socket.close();
+
+
 
     return 0;
 }
