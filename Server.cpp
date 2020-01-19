@@ -1,7 +1,5 @@
 #include "Server.h"
 
-#define BACKLOG_MAX 5
-
 Server::Server()
 {
     WSADATA wsa_data;
@@ -18,7 +16,7 @@ Server::Server()
         std::cout << "socket() failed\n" << std::endl;
     }
 
-    std::cout << "SERVER INICIALIZADO COM SUCESSO!!\n" << std::endl;
+    std::cout << "server: SERVER INICIALIZADO COM SUCESSO!!\n" << std::endl;
 }
 
 void Server::Bind(int porta){
@@ -46,7 +44,7 @@ void Server::Bind(int porta){
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "BIND FEITO COM SUCESSO" << std::endl;
+    std::cout << "server: BIND FEITO COM SUCESSO" << std::endl;
 }
 
 Client* Server::Accept(){
@@ -64,11 +62,9 @@ Client* Server::Accept(){
 
     int remote_length = sizeof(remote_address);
 
-    std::cout << "aguardando alguma conexao...\n" << std::endl;
-
     //aceita a conexao
-    cliente->local_socket = accept(local_socket, (struct sockaddr *) &remote_address, &remote_length);
-    if(cliente->local_socket == INVALID_SOCKET)
+    remote_socket = accept(local_socket, (struct sockaddr *) &remote_address, &remote_length);
+    if(remote_socket == INVALID_SOCKET)
     {
         WSACleanup();
         closesocket(local_socket);
@@ -77,26 +73,30 @@ Client* Server::Accept(){
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "conexao estabelecida com %s\n" << inet_ntoa(remote_address.sin_addr) << std::endl;
-    std::cout << "aguardando mensagens...\n" << std::endl;
-
     return cliente;
 }
 
+int Server::Recv(char *message, int size){
+    int message_length = recv(remote_socket, message, size, 0);
+    if(message_length == SOCKET_ERROR)
+        std::cout << "recv() failed\n" << std::endl;
+
+    return message_length;
+}
 
 void Server::close(){
     closesocket(local_socket);
-
-    local_socket = INVALID_SOCKET;
-
     WSACleanup();
 }
 
+
 int Server::getLocalPort(){
-    return 0;
+    return local_port;
 }
 
 Server::~Server()
 {
     //dtor
 }
+
+

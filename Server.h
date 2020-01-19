@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include "Client.h"
 
+class Client;
+
 class Server
 {
     public:
@@ -22,6 +24,10 @@ class Server
         O metodo é bloqueante enquanto a conexao é estabelecida.*/
         Client* Accept();
 
+        void test();
+
+        int Recv(char *message, int tam);
+
         //Fecha este socket.
         void close();
 
@@ -31,7 +37,8 @@ class Server
         ~Server();//destrutor
 
     private:
-        unsigned local_socket = INVALID_SOCKET; //used
+        long long unsigned int local_socket; //used
+        long long unsigned int remote_socket;
         unsigned short local_port; //used
         sockaddr_in local_address; //used
         sockaddr_in remote_address;
