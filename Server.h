@@ -5,8 +5,9 @@
 #include <iostream>
 #include <stdlib.h>
 #include "Client.h"
+#include "InetAddress.h"
 
-class Client;
+//class InetAddress;
 
 class Server
 {
@@ -24,8 +25,6 @@ class Server
         O metodo é bloqueante enquanto a conexao é estabelecida.*/
         Client* Accept();
 
-        void test();
-
         int Recv(char *message, int tam);
 
         //Fecha este socket.
@@ -40,8 +39,8 @@ class Server
         long long unsigned int local_socket; //used
         long long unsigned int remote_socket;
         unsigned short local_port; //used
-        sockaddr_in local_address; //used
-        sockaddr_in remote_address;
+        InetAddress *local_address;
+        InetAddress *remote_address;
 };
 
 #endif // SERVER_H_INCLUDED

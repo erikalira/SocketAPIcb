@@ -16,26 +16,17 @@ Server::Server()
         std::cout << "socket() failed\n" << std::endl;
     }
 
-    std::cout << "server: SERVER INICIALIZADO COM SUCESSO!!\n" << std::endl;
+    //std::cout << "server: SERVER INICIALIZADO COM SUCESSO!!" << std::endl;
 }
 
 void Server::Bind(int porta){
-    local_port = porta;
-
-    // zera a estrutura local_address
-    memset(&local_address, 0, sizeof(local_address));
-
-    // internet address family
-    local_address.sin_family = AF_INET;
+    local_address = InetAddress::getByAddress("127.0.0.1");
 
     // porta local
-    local_address.sin_port = htons(local_port);
-
-    // endereco
-    local_address.sin_addr.s_addr = htonl(INADDR_ANY); // inet_addr("127.0.0.1")
+    local_address->ip_address.sin_port = htons(porta);
 
     // interligando o socket com o endereço (local)
-    if (bind(local_socket, (struct sockaddr *) &local_address, sizeof(local_address)) == SOCKET_ERROR)
+    if (bind(local_socket, (struct sockaddr *) &(local_address->ip_address), sizeof(local_address->ip_address)) == SOCKET_ERROR)
     {
         WSACleanup();
         closesocket(local_socket);
@@ -51,19 +42,20 @@ Client* Server::Accept(){
     Client *cliente = new Client();
 
     // coloca o socket para escutar as conexoes
-    if ( listen(local_socket, 5) == SOCKET_ERROR )
+    if (listen(local_socket, 5) == SOCKET_ERROR)
     {
         WSACleanup();
         closesocket(local_socket);
-        std::cout << "listen() falhou!!!\n" << std::endl;
+        std::cout << "listen() failed\n" << std::endl;
         system("PAUSE");
         exit(EXIT_FAILURE);
     }
 
-    int remote_length = sizeof(remote_address);
+    int remote_length = sizeof(cliente->remote_address->ip_address);
 
-    //aceita a conexao
-    remote_socket = accept(local_socket, (struct sockaddr *) &remote_address, &remote_length);
+    std::cout << "server: AGUARDANDO CONEXAO" << std::endl;
+    //aceita a conexao (bloqueante)
+    remote_socket = accept(local_socket, (struct sockaddr *) &(cliente->remote_address->ip_address), &remote_length);
     if(remote_socket == INVALID_SOCKET)
     {
         WSACleanup();
@@ -72,6 +64,8 @@ Client* Server::Accept(){
         system("PAUSE");
         exit(EXIT_FAILURE);
     }
+
+    printf("conexao estabelecida com %s\n", inet_ntoa(cliente->remote_address->ip_address.sin_addr));
 
     return cliente;
 }
@@ -88,7 +82,6 @@ void Server::close(){
     closesocket(local_socket);
     WSACleanup();
 }
-
 
 int Server::getLocalPort(){
     return local_port;

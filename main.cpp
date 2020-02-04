@@ -12,31 +12,25 @@ void serverThread()
 {
     char message[128];
 
-    Server socket;
-
-    socket.Bind(8000);
-
+    Server *servidor = new Server();
+    servidor->Bind(8080);
     //listen and accept
-    socket.Accept();
+    servidor->Accept();
 
     do
     {
         // limpa o buffer
         memset(&message, 0, 128);
-
-        socket.Recv(message, 128);
-
+        servidor->Recv(message, 128);
         // exibe a mensagem na tela
         printf("cliente: %s\n", message);
     }while(strcmp(message, EXIT_CALL_STRING)); // sai quando receber um "#quit" do cliente
 
-    socket.close();
+    servidor->close();
 }
 
-int main (){
-    std::thread first (serverThread);
-
-    Client cliente("127.0.0.1", 8000);
+void clientThread(){
+    Client *cliente = new Client("127.0.0.1", 8080);
 
     char message[128];
     printf("digite as mensagens\n");
@@ -50,14 +44,40 @@ int main (){
         fflush(stdin);
 
         int message_length = strlen(message);
-
-        cliente.Send(message, message_length);
+        cliente->Send(message, message_length);
 
     }while(strcmp(message, "#quit")); // sai quando enviar um "#quit" para o servidor
 
-    first.join();
 
-    cliente.close();
+    cliente->close();
+}
+
+int main (){
+    std::thread server (serverThread);
+    //serverThread();
+    //clientThread();
+
+    Client *cliente = new Client("127.0.0.1", 8080);
+
+    char message[128];
+    printf("digite as mensagens\n");
+
+    do{
+        // limpa o buffer
+        memset(&message, 0, 128);
+
+        printf("msg: ");
+        gets(message);
+        fflush(stdin);
+
+        int message_length = strlen(message);
+        cliente->Send(message, message_length);
+
+    }while(strcmp(message, "#quit")); // sai quando enviar um "#quit" para o servidor
+
+    server.join();
+
+    cliente->close();
 
     return 0;
 }

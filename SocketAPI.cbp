@@ -37,6 +37,8 @@
 		</Linker>
 		<Unit filename="Client.cpp" />
 		<Unit filename="Client.h" />
+		<Unit filename="InetAddress.cpp" />
+		<Unit filename="InetAddress.h" />
 		<Unit filename="Server.cpp" />
 		<Unit filename="Server.h" />
 		<Unit filename="main.cpp" />

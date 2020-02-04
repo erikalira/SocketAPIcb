@@ -3,6 +3,9 @@
 #include <iostream>
 #include <string>
 #include <winsock2.h>
+#include "InetAddress.h"
+
+//class InetAddress;
 
 class Client
 {
@@ -35,7 +38,8 @@ class Client
         int remote_port;
         std::string local_ip;
         std::string remote_ip;
-        sockaddr_in remote_address;
+        InetAddress* remote_address;
+        friend class Server;
 };
 
 #endif // CLIENT_H
