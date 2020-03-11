@@ -1,0 +1,41 @@
+# depslib dependency file v1.0
+1579942009 source:c:\users\erika\github\socketapi\client.cpp
+	"Client.h"
+
+1579944558 c:\users\erika\github\socketapi\client.h
+	<iostream>
+	<string>
+	<winsock2.h>
+	"InetAddress.h"
+
+1579944743 source:c:\users\erika\github\socketapi\main.cpp
+	<iostream>
+	<thread>
+	"Server.h"
+
+1579939489 c:\users\erika\github\socketapi\server.h
+	<winsock2.h>
+	<iostream>
+	<stdlib.h>
+	"Client.h"
+	"InetAddress.h"
+
+1579391721 source:c:\users\erika\github\socketapi\socket.cpp
+	"Server.h"
+
+1579297664 c:\users\erika\github\socketapi\socket.h
+	<iostream>
+	<stdlib.h>
+	<winsock2.h>
+
+1579944320 source:c:\users\erika\github\socketapi\server.cpp
+	"Server.h"
+
+1579936393 c:\users\erika\github\socketapi\inetaddress.h
+	<string>
+	<winsock2.h>
+	<iostream>
+
+1579944136 source:c:\users\erika\github\socketapi\inetaddress.cpp
+	"InetAddress.h"
+
